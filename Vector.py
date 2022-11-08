@@ -8,9 +8,11 @@ class vector:
     
     def setMagnitude(self,n):
         mag = self.getMagnitude()
+
         try:
             self.x = (self.x * n) / mag
             self.y = (self.y * n) / mag
+
         except:
             pass
 
@@ -46,8 +48,8 @@ class vector:
         return self.x * v2.x + self.y * v2.y
 
     def normalize(self):
-        
         try:
             return vector(self.x / (self.x ** 2 + self.y ** 2) ** 0.5, self.y / (self.x ** 2 + self.y ** 2) ** 0.5)
+            
         except:
             return vector(self.x , self.y)

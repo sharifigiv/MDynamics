@@ -1,4 +1,5 @@
 from Vector import vector
+
 class RigidBody:
     def __init__(self, mass, width, height, position):
         self.mass = mass
@@ -18,8 +19,9 @@ class RigidBody:
         self.acceleration.y += force.y / self.mass
 
     def collision(self, rb):
-        if self.position[0] + self.width > rb.position[0] and self.position[0] < rb.position[0] + rb.width and self.position[1] + self.height > rb.position[1] and self.position[1] < rb.position[1] + rb.height:
+        if self.position.x + self.width > rb.position.x and self.position.x < rb.position.x + rb.width and self.position.y + self.height > rb.position.y and self.position.y < rb.position.y + rb.height:
             # Collision
+
             mv1 = self.velocity.multiply(self.mass)
             mv2 = rb.velocity.multiply(rb.mass) 
             mv = mv1.add(mv2)
@@ -44,63 +46,34 @@ class RigidBody:
 
         self.applyForce(drag_direction)
 
+    def friction(self, mu):
+        N = self.acceleration.multiply(self.mass)
+        friction = N.multiply(mu)
+
+        self.applyForce(friction)
 
     def update(self, dt, edges=True):
         if edges == True:
-            if self.position[1] >= 720 - self.height:
-                self.position[1] = 720 - self.height
+            if self.position.y >= 720 - self.height:
+                self.position.y = 720 - self.height
                 self.velocity.y *= -1
 
-            if self.position[0] >= 1080 - self.width:
-                self.position[0] = 1080 - self.width
+            if self.position.x >= 1080 - self.width:
+                self.position.x = 1080 - self.width
                 self.velocity.x *= -1
 
-            if self.position[0] <= 0:
-                self.position[0] = 0
+            if self.position.x <= 0:
+                self.position.x = 0
                 self.velocity.x *= -1
             
-            if self.position[1] <= 0:
-                self.position[1] = 0
+            if self.position.y <= 0:
+                self.position.y = 0
                 self.velocity.y *= -1
 
         self.velocity.x += self.acceleration.x * dt
         self.velocity.y += self.acceleration.y * dt
 
-        self.position[0] += self.velocity.x * dt
-        self.position[1] += self.velocity.y * dt
+        self.position.x += self.velocity.x * dt
+        self.position.y += self.velocity.y * dt
 
         self.acceleration = vector(0, 0)
-
-# def collision(self, rb):
-#     if (self.position[0] + self.width > rb.position[0] and self.position[0] < rb.position[0] + rb.width and self.position[1] + self.height > rb.position[1] and self.position[1] < rb.position[1] + rb.height):
-#         # Collision
-#         dx = rb.position[0] - self.position[0]
-#         dy = rb.position[1] - self.position[1]
-
-#         angle = (math.atan2(dy, dx) * 180) / math.pi
-#         if angle < 0:
-#             angle += 360
-
-#         if (angle >= 0 and angle < 45) or (angle > 315 and angle < 360):
-#             if self.velocity[0] > 0:
-#                 self.velocity[0] *= -1
-#             if rb.velocity[0] < 0:
-#                 rb.velocity[0] *= -1
-
-#         elif angle >= 45 and angle < 135:
-#             if self.velocity[1] > 0:
-#                 self.velocity[1] *= -1
-#             if rb.velocity[1] < 0:
-#                 rb.velocity[1] *= -1
-
-#         elif angle >= 135 and angle < 225:
-#             if self.velocity[0] < 0:
-#                 self.velocity[0] *= -1
-#             if rb.velocity[0] > 0:
-#                 rb.velocity[0] *= -1
-
-#         else:
-#             if self.velocity[1] < 0:
-#                 self.velocity[1] *= -1
-#             if rb.velocity[1] > 0:
-#                 rb.velocity[1] *= -1
