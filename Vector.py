@@ -1,4 +1,4 @@
-class vector:
+class Vector:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -6,7 +6,7 @@ class vector:
     def getMagnitude(self):
         return(self.x ** 2 + self.y ** 2) ** 0.5
     
-    def setMagnitude(self,n):
+    def setMagnitude(self, n):
         mag = self.getMagnitude()
 
         try:
@@ -17,28 +17,28 @@ class vector:
             pass
 
     def add(self, v2):
-        return vector(self.x + v2.x, self.y + v2.y)
+        return Vector(self.x + v2.x, self.y + v2.y)
 
     def addTo(self, v2):
         self.x += v2.x
         self.y += v2.y
 
     def subtract(self, v2):
-        return vector(self.x - v2.x, self.y - v2.y)
+        return Vector(self.x - v2.x, self.y - v2.y)
 
     def subtractFrom(self, v2):
         self.x -= v2.x
         self.y -= v2.y
 
     def multiply(self, n):
-        return vector(self.x * n, self.y * n)
+        return Vector(self.x * n, self.y * n)
 
     def multiplyBy(self, n):
         self.x *= n
         self.y *= n
 
     def divide(self, n):
-        return vector(self.x / n, self.y / n)
+        return Vector(self.x / n, self.y / n)
 
     def divideBy(self, n):
         self.x /= n
@@ -49,7 +49,7 @@ class vector:
 
     def normalize(self):
         try:
-            return vector(self.x / (self.x ** 2 + self.y ** 2) ** 0.5, self.y / (self.x ** 2 + self.y ** 2) ** 0.5)
+            return Vector(self.x / (self.x ** 2 + self.y ** 2) ** 0.5, self.y / (self.x ** 2 + self.y ** 2) ** 0.5)
             
         except:
-            return vector(self.x , self.y)
+            return Vector(self.x, self.y)

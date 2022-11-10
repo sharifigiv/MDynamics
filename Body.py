@@ -1,11 +1,11 @@
 from Transform import RigidBody
-from Vector import vector
+from Vector import Vector
 
 class MDynamics:
     def __init__(self):
         """ Initializes the physics engine"""
 
-        self.rigidBodies = []
+        self.rigidBodies = {}
 
         self.drag = True
         self.dragv = 2
@@ -14,9 +14,9 @@ class MDynamics:
         self.g = 9.81
 
         self.friction = True
-        self.mu = 10
+        self.mu = -1
 
-    def rec_rigidbody(self, x: int, y: int, width: int, height: int, mass: int):
+    def make_rec_rigidBody(self, name:str, x: int, y: int, width: int, height: int, mass: int):
         """ Creates a rectangle rigid body"""
 
         if mass < 0:
@@ -26,10 +26,7 @@ class MDynamics:
             Exception('mass should be smaller than 999999999999999999')
         
         else:
-            rb = RigidBody(mass, width, height, vector(x, y))
-
-            self.rigidBodies.append(rb)
-            return rb
+            self.rigidBodies[name] = RigidBody(mass, width, height, Vector(x, y))
 
     def circle_rigidbody(self, x: int, y: int, radius: float, mass: int):
         """ Creates a circle rigid body"""
@@ -37,14 +34,11 @@ class MDynamics:
 
     def calculate_collisions(self):
         """Calculates Collision between bodies"""
+        keys = list(self.rigidBodies.keys())
+        for rb1_name in keys:
+            for rb2_name in keys[keys.index(rb1_name):]:
+                    self.rigidBodies[rb1_name].collision(self.rigidBodies[rb2_name])
 
-        # TO DO
-        # درست کردن این فوره (اشتباهه)
-
-        for rb1 in self.rigidBodies:
-            for rb2 in self.rigidBodies:
-                if rb1 != rb2:
-                    rb1.collision(rb2)
 
     def are_colliding(self, rb1, rb2):
         """Returns if 2 rigidbodies are colliding"""
@@ -58,28 +52,23 @@ class MDynamics:
     def update_rigidbodies(self, dt: float):
         """Updates all rigid bodies position"""
 
-        for rb in self.rigidBodies:
+        for rb in list(self.rigidBodies.keys()):
+            RigidBody_object = self.rigidBodies[rb]
             if self.drag:
-                rb.drag(self.dragv)
+                RigidBody_object.drag(self.dragv)
 
             if self.gravity:
-                rb.applyForce(vector(0, 9.81 * rb.mass))
+                RigidBody_object.applyForce(Vector(0, 9.81 * RigidBody_object.mass))
 
-            if self.friction:
-                rb.friction(self.mu)
+            RigidBody_object.update(dt)
 
-            rb.update(dt)
-
-    def update(rb):
+    def update(self, rb, dt):
         """Update this rigid body position"""
 
         if self.drag:
             rb.drag(self.dragv)
 
         if self.gravity:
-            rb.applyForce(vector(0, 9.81 * rb.mass))
-
-        if self.friction:
-            rb.friction(self.mu)
+            rb.applyForce(Vector(0, 9.81 * rb.mass))
 
         rb.update(dt)

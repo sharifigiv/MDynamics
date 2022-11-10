@@ -28,10 +28,10 @@ while not pr.window_should_close():
     if pr.is_mouse_button_down(1):
         wind = -10000
 
-    Cube.applyForce(vector(0,9.81*Cube.mass))
-    Cube.applyForce(vector(wind/Cube.mass,0))
-    Cube2.applyForce(vector(0,9.81*Cube2.mass))
-    Cube2.applyForce(vector(wind/Cube2.mass,0))
+    Cube.applyForce(Vector(0, 9.81 * Cube.mass))
+    Cube.applyForce(Vector(wind / Cube.mass, 0))
+    Cube2.applyForce(Vector(0, 9.81 * Cube2.mass))
+    Cube2.applyForce(Vector(wind / Cube2.mass, 0))
     # Cube3.applyForce([0,9.81*Cube3.mass])
     # Cube3.applyForce([(wind*Cube3.mass),0])
     Cube.collision(Cube2)
