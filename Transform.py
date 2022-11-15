@@ -11,6 +11,7 @@ class RigidBody:
         self.velocity = Vector(0, 0)
         self.acceleration = Vector(0, 0)
         self.r = (self.mass ** 0.5) * 10
+        self.mu = 0.8
     def applyForce(self, force):
         # f = m * a
         # a = f / m
@@ -46,11 +47,9 @@ class RigidBody:
         self.applyForce(drag_direction)
 
     def friction(self, mu):
-        mu = 0.1
-        friction = self.velocity
+        friction = Vector(0 , self.mass * 9.81)
         friction.multiplyBy(mu)
         friction.multiplyBy(-1)
-        friction.multiplyBy(self.mass * 9.8)
 
         self.applyForce(friction)
 
@@ -58,23 +57,24 @@ class RigidBody:
         if edges:
             if self.position.y >= 720 - self.height:
                 self.position.y = 720 - self.height
+                self.friction(self.mu)
                 self.velocity.y *= -1
-                self.friction(-1)
+
 
             if self.position.x >= 1080 - self.width:
                 self.position.x = 1080 - self.width
+                self.friction(self.mu)
                 self.velocity.x *= -1
-                self.friction(-1)
 
             if self.position.x <= 0:
                 self.position.x = 0
+                self.friction(self.mu)
                 self.velocity.x *= -1
-                self.friction(-1)
             
             if self.position.y <= 0:
                 self.position.y = 0
+                self.friction(self.mu)
                 self.velocity.y *= -1
-                self.friction(-1)
 
         self.velocity.x += self.acceleration.x * dt
         self.velocity.y += self.acceleration.y * dt

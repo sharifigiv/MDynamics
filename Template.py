@@ -1,12 +1,12 @@
 from Body import MDynamics
 import pyray as pr
 import time
-
+from Vector import Vector
 Physics = MDynamics()
 pr.init_window(1080, 720, "Physics")
 
-Physics.make_rec_rigidBody("Cube", 100, 150, 50, 50, 3)
-Physics.make_rec_rigidBody("Cube2", 100, 300, 55, 55, 4)
+Physics.make_rec_rigidBody("Cube", 0, 500, 50, 50, 30)
+Physics.make_rec_rigidBody("Cube2", 0, 300, 55, 55, 40)
 old_time = time.time()
 
 while not pr.window_should_close():
@@ -17,6 +17,8 @@ while not pr.window_should_close():
     dt = new_time - old_time
     old_time = new_time
 
+    if(pr.is_mouse_button_down(1)):
+        Physics.rigidBodies["Cube"].applyForce(Vector(20,0))
     Physics.calculate_collisions()
     Physics.update_rigidbodies(dt)
 
