@@ -12,6 +12,8 @@ class RigidBody:
         self.acceleration = Vector(0, 0)
         self.r = (self.mass ** 0.5) * 10
         self.mu = 0.8
+        self.type = 'Rec'
+        
     def applyForce(self, force):
         # f = m * a
         # a = f / m

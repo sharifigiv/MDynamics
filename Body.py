@@ -49,7 +49,7 @@ class MDynamics:
         else:
             return False
 
-    def update_rigidbodies(self, dt: float):
+    def update_rigid_bodies(self, dt: float):
         """Updates all rigid bodies position"""
 
         for rb in list(self.rigidBodies.keys()):
