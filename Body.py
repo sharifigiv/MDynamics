@@ -8,15 +8,15 @@ class MDynamics:
         self.rigidBodies = {}
 
         self.drag = True
-        self.dragv = 2
+        self.dragv = 6
 
         self.gravity = True
-        self.g = 9.81
+        self.g = 98.1
 
         self.friction = True
         self.mu = -1
 
-    def make_rec_rigidBody(self, name:str, x: int, y: int, width: int, height: int, mass: int):
+    def make_pol_rigidBody(self, name:str, x: int, y: int, mass: int, type, sides):
         """ Creates a rectangle rigid body"""
 
         if mass < 0:
@@ -26,7 +26,7 @@ class MDynamics:
             Exception('mass should be smaller than 999999999999999999')
         
         else:
-            self.rigidBodies[name] = RigidBody(mass, width, height, Vector(x, y))
+            self.rigidBodies[name] = RigidBody(mass, Vector(x, y),type,sides)
 
     def circle_rigidbody(self, x: int, y: int, radius: float, mass: int):
         """ Creates a circle rigid body"""
@@ -58,7 +58,7 @@ class MDynamics:
                 RigidBody_object.drag(self.dragv)
 
             if self.gravity:
-                RigidBody_object.applyForce(Vector(0, 9.81 * RigidBody_object.mass))
+                RigidBody_object.applyForce(Vector(0, 98.1 * RigidBody_object.mass))
 
             RigidBody_object.update(dt)
 
