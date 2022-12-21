@@ -53,3 +53,20 @@ def poly_line(vertices, point1, point2):
             return True
 
     return False
+
+
+def poly_poly(poly1, poly2):
+    next = 0
+    for current in range(len(poly1)):
+        next = current + 1
+        if (next == len(poly1)):
+            next = 0
+
+        vc = poly1[current]
+        vn = poly1[next]
+
+        collide = poly_line(poly2, vc.x, vc.y, vn.x, vn.y)
+        if collide:
+            return True
+
+    return False
