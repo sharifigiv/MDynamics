@@ -68,5 +68,7 @@ def poly_poly(poly1, poly2):
         collide = poly_line(poly2, vc.x, vc.y, vn.x, vn.y)
         if collide:
             return True
-
     return False
+
+def poly_circle(poly,circle):
+    pass

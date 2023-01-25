@@ -1,5 +1,7 @@
-from Transform import RigidBody
+from Transform import *
 from Vector import Vector
+
+# ما عبدل را راضی کردیم
 
 class MDynamics:
     def __init__(self):
@@ -16,7 +18,7 @@ class MDynamics:
         self.friction = True
         self.mu = -1
 
-    def make_pol_rigidBody(self, name:str, x: int, y: int, mass: int, type, sides):
+    def poly_rigidBody(self, name:str, x: int, y: int, mass: int, sides: list):
         """ Creates a rectangle rigid body"""
 
         if mass < 0:
@@ -26,11 +28,19 @@ class MDynamics:
             Exception('mass should be smaller than 999999999999999999')
         
         else:
-            self.rigidBodies[name] = RigidBody(mass, Vector(x, y),type,sides)
+            self.rigidBodies[name] = Poly(sides, mass, Vector(x, y))
 
-    def circle_rigidbody(self, x: int, y: int, radius: float, mass: int):
+    def circle_rigidbody(self, name: str, x: int, y: int, radius: float, mass: int):
         """ Creates a circle rigid body"""
 
+        if mass < 0:
+            Exception("mass should be at least 1")
+
+        elif mass > 999999999999999999:
+            Exception('mass should be smaller than 999999999999999999')
+        
+        else:
+            self.rigidBodies[name] = Circle(radius, mass, Vector(x, y))
 
     def calculate_collisions(self):
         """Calculates Collision between bodies"""
