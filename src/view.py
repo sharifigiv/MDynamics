@@ -32,12 +32,13 @@ while not pr.window_should_close():
 
     if key == 82:
         i += 1
-        Physics.make_pol_rigidBody('Cube' + str(i), mouse_pos[0], mouse_pos[1], 1000, "polygon",[100])
+        Physics.circle_rigidbody('circle' + str(i), mouse_pos[0], mouse_pos[1], 10,100)
+        
     if key == 32:
         if paused:
             paused = False
         else:
-            paused = True
+            paused = True  
 
     if not paused:
         
@@ -50,8 +51,7 @@ while not pr.window_should_close():
     for rb in list(Physics.rigidBodies.keys()):
         m = Physics.rigidBodies
 
-        rec = pr.Rectangle(m[rb].position.x, m[rb].position.y, 1 * 100, 1 * 100 )
-        pr.draw_rectangle_lines_ex(rec, 1.0, pr.BLACK)
+        pr.draw_circle_lines(int(m[rb].position.x), int(m[rb].position.y), m[rb].r, pr.BLACK)
         pr.draw_text(str(pr.get_fps()),10,10,22,pr.BLACK)
 
-    pr.end_drawing()    
+    pr.end_drawing()

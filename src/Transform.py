@@ -106,10 +106,11 @@ class Circle(RigidBody):
             p1 = self.position
             p2 = R2.position
 
-            vp = Vector(p1, p2)
-            vp_l = abs(vp.getMagnitude())
+            dx = p1.x - p2.x
+            dy = p1.y - p2.y
+            dist = (dx**2 + dy**2)**0.5
 
-            if vp_l <= self.r + R2.r:
+            if dist <= self.r + R2.r:
                 mv1 = self.velocity.multiply(self.mass)
                 mv2 = R2.velocity.multiply(R2.mass)
                 mv = mv1.add(mv2)
