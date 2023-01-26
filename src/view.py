@@ -25,14 +25,17 @@ while not pr.window_should_close():
 
     key = pr.get_key_pressed()
 
+    
 
     if pr.is_mouse_button_down(0):
         mouse_pos[0] = pr.get_mouse_x()
         mouse_pos[1] = pr.get_mouse_y()
-
-    if key == 82:
+    # if key == 82:
+    #     i += 1
+    #     Physics.poly_rigidbody('rect' + str(i), mouse_pos[0], mouse_pos[1], 30,100)
+    if key == 67:
         i += 1
-        Physics.circle_rigidbody('circle' + str(i), mouse_pos[0], mouse_pos[1], 10,100)
+        Physics.circle_rigidbody('circle' + str(i), mouse_pos[0], mouse_pos[1], 30,100)
         
     if key == 32:
         if paused:

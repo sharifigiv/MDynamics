@@ -1,8 +1,6 @@
 from Transform import *
 from Vector import Vector
 
-# ما عبدل را راضی کردیم
-
 class MDynamics:
     def __init__(self):
         """ Initializes the physics engine"""
