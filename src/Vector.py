@@ -1,3 +1,5 @@
+from math import cos, sin
+
 class Vector:
     def __init__(self, x, y):
         self.x = x
@@ -53,3 +55,15 @@ class Vector:
             
         except:
             return Vector(self.x, self.y)
+
+def rotate(point1, point2, angel):
+    rotated_vector_p1 = point1.multiply(cos(angel))
+    rotated_vector_p1.subtractFrom(point2.multiply(sin(angel)))
+
+    rotated_vector_p2 = point1.multiply(sin(angel))
+    rotated_vector_p2.addTo(point2.multiply(cos(angel)))
+
+    return [rotated_vector_p1, rotated_vector_p2]
+
+moteghayer = rotate(Vector(0,0), Vector(1,0), 90)
+print(moteghayer[1].x, moteghayer[1].y)

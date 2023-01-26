@@ -1,7 +1,7 @@
 from Body import MDynamics
 import pyray as pr
 import time
-import Vector
+from Vector import Vector, rotate
 
 pr.init_window(1280, 720, "View")
 Physics = MDynamics()
@@ -30,9 +30,21 @@ while not pr.window_should_close():
     if pr.is_mouse_button_down(0):
         mouse_pos[0] = pr.get_mouse_x()
         mouse_pos[1] = pr.get_mouse_y()
-    # if key == 82:
-    #     i += 1
-    #     Physics.poly_rigidbody('rect' + str(i), mouse_pos[0], mouse_pos[1], 30,100)
+    if key == 82:
+        i += 1
+        sides = []
+        new_line = [Vector(mouse_pos[0], mouse_pos[1]), Vector(mouse_pos[0] + 20, mouse_pos[1])]
+        sides.append(new_line)
+        for i in range(5):
+            last_point = sides[len(sides) - 1][1]
+
+            last_line_vector = sides[len(sides) - 1][1].subtract(sides[len(sides) - 1][0])
+            point2 = last_line_vector.add(last_point)
+
+            final_line = rotate(last_point, point2, 108)
+            sides.append(final_line)
+
+        Physics.poly_rigidBody('poly' + str(i), mouse_pos[0], mouse_pos[1], 30,sides)
     if key == 67:
         i += 1
         Physics.circle_rigidbody('circle' + str(i), mouse_pos[0], mouse_pos[1], 30,100)
@@ -48,13 +60,14 @@ while not pr.window_should_close():
         Physics.calculate_collisions()
         Physics.update_rigid_bodies(dt)
         
-        # Physics.calculate_collisions()
-        # Physics.update_rigid_bodies(dt)
-        # Physics.calculate_collisions()
     for rb in list(Physics.rigidBodies.keys()):
-        m = Physics.rigidBodies
+        if(Physics.rigidBodies[rb].type == 'Poly'):
+            for line in Physics.rigidBodies[rb].sides:
+                pr.draw_line(int(line[0].x), int(line[0].y), int(line[1].x), int(line[1].y), pr.BLACK)
+        elif(Physics.rigidBodies[rb].type == 'Circle'):
+            m = Physics.rigidBodies
 
-        pr.draw_circle_lines(int(m[rb].position.x), int(m[rb].position.y), m[rb].r, pr.BLACK)
-        pr.draw_text(str(pr.get_fps()),10,10,22,pr.BLACK)
+            pr.draw_circle_lines(int(m[rb].position.x), int(m[rb].position.y), m[rb].r, pr.BLACK)
+            pr.draw_text(str(pr.get_fps()),10,10,22,pr.BLACK)
 
     pr.end_drawing()
