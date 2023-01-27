@@ -1,4 +1,5 @@
-from math import cos, sin
+from math import cos, sin, radians
+from numpy import *
 
 class Vector:
     def __init__(self, x, y):
@@ -6,8 +7,8 @@ class Vector:
         self.y = y
 
     def getMagnitude(self):
-        return(self.x ** 2 + self.y ** 2) ** 0.5
-    
+        return (self.x ** 2 + self.y ** 2) ** 0.5
+
     def setMagnitude(self, n):
         mag = self.getMagnitude()
 
@@ -52,18 +53,21 @@ class Vector:
     def normalize(self):
         try:
             return Vector(self.x / (self.x ** 2 + self.y ** 2) ** 0.5, self.y / (self.x ** 2 + self.y ** 2) ** 0.5)
-            
+
         except:
             return Vector(self.x, self.y)
 
-def rotate(point1, point2, angel):
-    rotated_vector_p1 = point1.multiply(cos(angel))
-    rotated_vector_p1.subtractFrom(point2.multiply(sin(angel)))
 
-    rotated_vector_p2 = point1.multiply(sin(angel))
-    rotated_vector_p2.addTo(point2.multiply(cos(angel)))
+def rotate(origin, point, angle):
+    angle = radians(angle)
+    ox, oy = origin.x, origin.y
+    px, py = point.x, point.y
 
-    return [rotated_vector_p1, rotated_vector_p2]
+    qx = ox + cos(angle) * (px - ox) - sin(angle) * (py - oy)
+    qy = oy + sin(angle) * (px - ox) + cos(angle) * (py - oy)
+    return Vector(qx, qy)
 
-moteghayer = rotate(Vector(0,0), Vector(1,0), 90)
-print(moteghayer[1].x, moteghayer[1].y)
+x1 = Vector(0, 0)
+x2 = Vector(5, 5)
+x2 = rotate(x1, x2, radians(90))
+print(x2.x, x2.y)

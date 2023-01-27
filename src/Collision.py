@@ -87,7 +87,8 @@ def poly_poly(poly1, poly2):
 
 
 def circle_point(point, circle):
-    distance = (((point.x - circle.x) ** 2) + ((point.x - circle.x) ** 2) ) ** 0.5
+    
+    distance = (((point.x - circle.position.x) ** 2) + ((point.x - circle.position.x) ** 2) ) ** 0.5
 
     if distance <= circle.r:
         return True
@@ -105,7 +106,7 @@ def circle_line(point1, point2, circle):
 
     length = ((dist.x ** 2) + (dist.y ** 2)) ** 0.5
 
-    dot = (((circle.x-point1.x)*(point2.x-point1.x)) +
+    dot = (((circle.position.x-point1.x)*(point2.x-point1.x)) +
            ((circle.y-point1.y)*(point2.y-point1.y)))
 
     closestx = point1.x + (dot * (point2.x - point1.x))
@@ -116,7 +117,7 @@ def circle_line(point1, point2, circle):
     if not onSegment:
         return False
 
-    distX = closest.x - circle.x
+    distX = closest.x - circle.position.x
     distY = closest.y - circle.y
     distance = ((dist.x ** 2) + (dist.y ** 2)) ** 0.5
 

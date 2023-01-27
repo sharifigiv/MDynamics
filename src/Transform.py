@@ -47,7 +47,7 @@ class Poly(RigidBody):
 
     def update(self, dt, edges=True):
         self.dt = dt
-        if edges:
+        if False:
             if self.position.y >= 720 - self.height:
                 self.position.y = 720 - self.height
                 self.friction(self.mu)
@@ -71,29 +71,56 @@ class Poly(RigidBody):
         self.velocity.x += self.acceleration.x * dt
         self.velocity.y += self.acceleration.y * dt
 
+
+        new_p = self.velocity.x * dt
         self.position.x += self.velocity.x * dt
         self.position.y += self.velocity.y * dt
 
+
+
+        for side in self.sides:
+            for line in side:
+                line.x += new_p
+                line.y += new_p
+
         self.acceleration = Vector(0, 0)
 
-    def collision(self, rb):
-        # if (rb.position.x + rb.width + (rb.velocity.x * self.dt) >= self.position.x + (self.velocity.x * self.dt) and rb.position.x+(rb.velocity.x * self.dt) <= self.position.x + self.width + (self.velocity.x * self.dt) and rb.position.y + rb.height + (rb.velocity.y * self.dt) >= self.position.y + (self.velocity.y * self.dt) and rb.position.y + (rb.velocity.y * self.dt) <= self.position.y + self.height + (self.velocity.y * self.dt)):
+    def collision(self, R2):
+        if R2.type == 'Circle':
+            if poly_circle(self.sides, R2):
+                mv1 = self.velocity.multiply(self.mass)
+                mv2 = R2.velocity.multiply(R2.mass)
+                mv = mv1.add(mv2)
 
-        mv1 = self.velocity.multiply(self.mass)
-        mv2 = rb.velocity.multiply(rb.mass)
-        mv = mv1.add(mv2)
+                deltav = self.velocity.subtract(R2.velocity)
+                deltav.multiplyBy(R2.mass)
+                deltamv = mv.subtract(deltav)
 
-        deltav = self.velocity.subtract(rb.velocity)
-        deltav.multiplyBy(rb.mass)
-        deltamv = mv.subtract(deltav)
+                v1p = Vector(deltamv.x / (self.mass + R2.mass),
+                            deltamv.y / (self.mass + R2.mass))
+                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
+                            self.velocity.y + v1p.y - R2.velocity.y)
 
-        v1p = Vector(deltamv.x / (self.mass + rb.mass),
-                     deltamv.y / (self.mass + rb.mass))
-        v2p = Vector(self.velocity.x + v1p.x - rb.velocity.x,
-                     self.velocity.y + v1p.y - rb.velocity.y)
+                self.velocity = v1p
+                R2.velocity = v2p
 
-        self.velocity = v1p
-        rb.velocity = v2p
+        elif R2.type == 'Poly':
+            if poly_poly(R2.sides, self.sides):
+                mv1 = self.velocity.multiply(self.mass)
+                mv2 = R2.velocity.multiply(R2.mass)
+                mv = mv1.add(mv2)
+
+                deltav = self.velocity.subtract(R2.velocity)
+                deltav.multiplyBy(R2.mass)
+                deltamv = mv.subtract(deltav)
+
+                v1p = Vector(deltamv.x / (self.mass + R2.mass),
+                            deltamv.y / (self.mass + R2.mass))
+                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
+                            self.velocity.y + v1p.y - R2.velocity.y)
+
+                self.velocity = v1p
+                R2.velocity = v2p
 
 class Circle(RigidBody):
     def __init__(self,r, mass, position):
@@ -128,7 +155,22 @@ class Circle(RigidBody):
                 R2.velocity = v2p
 
         elif R2.type == 'Poly':
-            pass
+            if poly_circle(R2.sides, self):
+                mv1 = self.velocity.multiply(self.mass)
+                mv2 = R2.velocity.multiply(R2.mass)
+                mv = mv1.add(mv2)
+
+                deltav = self.velocity.subtract(R2.velocity)
+                deltav.multiplyBy(R2.mass)
+                deltamv = mv.subtract(deltav)
+
+                v1p = Vector(deltamv.x / (self.mass + R2.mass),
+                            deltamv.y / (self.mass + R2.mass))
+                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
+                            self.velocity.y + v1p.y - R2.velocity.y)
+
+                self.velocity = v1p
+                R2.velocity = v2p
 
     
     def update(self, dt, edges=True):
