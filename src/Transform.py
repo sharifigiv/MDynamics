@@ -7,7 +7,7 @@ class RigidBody:
         self.mass = mass
 
         self.position = position
-        self.velocity = Vector(0, 0)
+        self.velocity = Vector(5, 0)
         self.acceleration = Vector(0, 0)
 
         self.mu = 0.8
@@ -72,16 +72,18 @@ class Poly(RigidBody):
         self.velocity.y += self.acceleration.y * dt
 
 
-        new_p = self.velocity.x * dt
         self.position.x += self.velocity.x * dt
         self.position.y += self.velocity.y * dt
 
 
-
-        for side in self.sides:
-            for line in side:
-                line.x += new_p
-                line.y += new_p
+        self.sides[0][0].x += self.velocity.x * dt
+        self.sides[0][0].y += self.velocity.y * dt
+        self.sides[len(self.sides)-1][1].x += self.velocity.x * dt
+        self.sides[len(self.sides)-1][1].y += self.velocity.y * dt
+        for line in self.sides:
+            for point in line:
+                point.x += self.velocity.x * dt
+                point.y += self.velocity.y * dt 
 
         self.acceleration = Vector(0, 0)
 

@@ -17,12 +17,13 @@ def line_point(line_point1, line_point2, point):
 
 
 def line_line(point1, point2, point3, point4):
+
     uA = ((point4.x - point3.x) * (point1.y - point3.y) - (point4.y - point3.y) * (point1.x - point3.x)
-          ) / ((point4.y - point3.y) * (point2.x - point1.x) - (point4.x - point3.x) * (point2.y - point1.y))
+          ) / (((point4.y - point3.y) * (point2.x - point1.x) - (point4.x - point3.x) * (point2.y - point1.y))+0.0000001)
 
     uB = ((point2.x - point1.x) * (point1.y - point3.y) - (point2.y - point1.y) * (point1.x - point3.x)) / \
-        ((point4.y - point3.y) * (point2.x - point1.x) -
-         (point4.x - point3.x) * (point2.y - point1.y))
+        (((point4.y - point3.y) * (point2.x - point1.x) -
+         (point4.x - point3.x) * (point2.y - point1.y))+0.0000001)
 
     if (uA >= 0 and uA <= 1 and uB >= 0 and uB <= 1):
         return True
@@ -63,7 +64,7 @@ def poly_line(vertices, point1, point2):
         point3 = vertices[current]
         point4 = vertices[next]
 
-        collide = line_line(point1, point2, point3, point4)
+        collide = line_line(point1, point2, point3[0], point3[1])
         if collide:
             return True
 
@@ -80,12 +81,12 @@ def poly_poly(poly1, poly2):
         vc = poly1[current]
         vn = poly1[next]
 
-        collide = poly_line(poly2, vc.x, vc.y, vn.x, vn.y)
+        collide = poly_line(poly2, vc[0], vc[1])
         if collide:
             return True
     return False
 
-
+# 
 def circle_point(point, circle):
     
     distance = (((point.x - circle.position.x) ** 2) + ((point.x - circle.position.x) ** 2) ) ** 0.5

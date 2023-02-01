@@ -31,21 +31,22 @@ while not pr.window_should_close():
         mouse_pos[0] = pr.get_mouse_x()
         mouse_pos[1] = pr.get_mouse_y()
     if key == 82:
-        i += 15
+        i += 1
         sides = []
-        new_line = [Vector(mouse_pos[0], mouse_pos[1]), Vector(mouse_pos[0]+40, mouse_pos[1])]
+        new_line = [Vector(mouse_pos[0], mouse_pos[1]), Vector(mouse_pos[0]+40, mouse_pos[1]+10)]
         sides.append(new_line)
-        for i in range(4):
+        for side in range(2):
             last_point_2 = sides[len(sides) - 1][1]
             last_point_1 = sides[len(sides) - 1][0]
 
             line_last = last_point_2.subtract(last_point_1)
             final_point = line_last.add(last_point_2)
 
-            final_line = rotate(last_point_2, final_point, 72)
+            final_line = rotate(last_point_2, final_point, -120)
             sides.append([last_point_2, final_line])
 
         Physics.poly_rigidBody('poly' + str(i), mouse_pos[0], mouse_pos[1], 30,sides)
+
     if key == 67:
         i += 1
         Physics.circle_rigidbody('circle' + str(i), mouse_pos[0], mouse_pos[1], 30,100)
@@ -70,6 +71,6 @@ while not pr.window_should_close():
             m = Physics.rigidBodies
 
             pr.draw_circle_lines(int(m[rb].position.x), int(m[rb].position.y), m[rb].r, pr.BLACK)
-            pr.draw_text(str(pr.get_fps()),10,10,22,pr.BLACK)
+    pr.draw_text(str(pr.get_fps()),10,10,22,pr.BLACK)
 
     pr.end_drawing()
