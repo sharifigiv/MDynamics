@@ -7,7 +7,7 @@ class RigidBody:
         self.mass = mass
 
         self.position = position
-        self.velocity = Vector(5, 0)
+        self.velocity = Vector(5, -5)
         self.acceleration = Vector(0, 0)
 
         self.mu = 0.8
