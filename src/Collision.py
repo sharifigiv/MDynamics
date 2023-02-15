@@ -1,6 +1,5 @@
 from Vector import Vector
 
-
 def line_point(line_point1, line_point2, point):
     distance1 = (((line_point1.x - point.x) ** 2) +
                  ((line_point1.y - point.y) ** 2)) ** 0.5
@@ -14,7 +13,6 @@ def line_point(line_point1, line_point2, point):
         return True
 
     return False
-
 
 def line_line(point1, point2, point3, point4):
     uA = ((point4.x - point3.x) * (point1.y - point3.y) - (point4.y - point3.y) * (point1.x - point3.x)
@@ -30,7 +28,6 @@ def line_line(point1, point2, point3, point4):
     else:
         return False
 
-
 def poly_point(vertices, point):
     collision = False
     next = 0
@@ -40,8 +37,8 @@ def poly_point(vertices, point):
         if (next == len(vertices)):
             next = 0
 
-        vc = vertices[current]
-        vn = vertices[next]
+        vc = vertices[current][0]
+        vn = vertices[next][1]
 
         if (((vc.y > point.y and vn.y < point.y) or (vc.y < point.y and vn.y > point.y)) and (point.x < (vn.x - vc.x) * (point.y - vc.y) / (vn.y - vc.y) + vc.x)):
             if collision:
@@ -50,7 +47,6 @@ def poly_point(vertices, point):
                 collision = True
 
     return collision
-
 
 def poly_line(vertices, point1, point2):
     next = 0
@@ -69,9 +65,9 @@ def poly_line(vertices, point1, point2):
 
     return False
 
-
 def poly_poly(poly1, poly2):
     next = 0
+
     for current in range(len(poly1)):
         next = current + 1
         if (next == len(poly1)):
@@ -83,9 +79,9 @@ def poly_poly(poly1, poly2):
         collide = poly_line(poly2, vc[0], vc[1])
         if collide:
             return True
+
     return False
 
-# 
 def circle_point(point, circle):
     
     distance = (((point.x - circle.position.x) ** 2) + ((point.x - circle.position.x) ** 2) ) ** 0.5
@@ -94,7 +90,6 @@ def circle_point(point, circle):
         return True
     
     return False
-
 
 def circle_line(point1, point2, circle):
     inside1 = circle_point(point1, circle)
@@ -126,7 +121,6 @@ def circle_line(point1, point2, circle):
 
     return False
 
-
 def poly_circle(vertices, circle):
     next = 0
     for current in range(len(vertices)):
@@ -138,4 +132,5 @@ def poly_circle(vertices, circle):
         collision = circle_line(current_vector, next_vector, circle)
         if collision:
             return True
+            
         return False

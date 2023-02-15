@@ -1,7 +1,6 @@
 from Vector import Vector
 from Collision import *
 
-
 class RigidBody:
     def __init__(self, mass, position):
         self.mass = mass
@@ -47,26 +46,22 @@ class Poly(RigidBody):
 
     def update(self, dt, edges=True):
         self.dt = dt
-        if False:
-            if self.position.y >= 720 - self.height:
-                self.position.y = 720 - self.height
-                self.friction(self.mu)
-                self.velocity.y *= -1
 
-            if self.position.x >= 1080 - self.width:
-                self.position.x = 1080 - self.width
-                self.friction(self.mu)
-                self.velocity.x *= -1
+        if self.sides[0][0].y >= 720:
+            self.friction(self.mu)
+            self.velocity.y *= -1
 
-            if self.position.x <= 0:
-                self.position.x = 0
-                self.friction(self.mu)
-                self.velocity.x *= -1
+        if poly_line(self.sides, Vector(0,0), Vector(1280, 0)):
+            self.friction(self.mu)
+            self.velocity.y *= -1            
 
-            if self.position.y <= 0:
-                self.position.y = 0
-                self.friction(self.mu)
-                self.velocity.y *= -1
+        if poly_line(self.sides, Vector(1280, 0), Vector(1280, 720)):
+            self.friction(self.mu)
+            self.velocity.x *= -1
+
+        if poly_line(self.sides, Vector(0, 0), Vector(0, 720)):
+            self.friction(self.mu)
+            self.velocity.x *= -1
 
         self.velocity.x += self.acceleration.x * dt
         self.velocity.y += self.acceleration.y * dt
@@ -75,11 +70,12 @@ class Poly(RigidBody):
         self.position.x += self.velocity.x * dt
         self.position.y += self.velocity.y * dt
 
-
         self.sides[0][0].x += self.velocity.x * dt
         self.sides[0][0].y += self.velocity.y * dt
+
         self.sides[len(self.sides)-1][1].x += self.velocity.x * dt
         self.sides[len(self.sides)-1][1].y += self.velocity.y * dt
+
         for line in self.sides:
             for point in line:
                 point.x += self.velocity.x * dt
@@ -92,11 +88,11 @@ class Poly(RigidBody):
             if poly_circle(self.sides, R2):
                 mv1 = self.velocity.multiply(self.mass)
                 mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1.add(mv2)
+                mv = mv1 + mv2
 
-                deltav = self.velocity.subtract(R2.velocity)
+                deltav = self.velocity - R2.velocity
                 deltav.multiplyBy(R2.mass)
-                deltamv = mv.subtract(deltav)
+                deltamv = mv - deltav
 
                 v1p = Vector(deltamv.x / (self.mass + R2.mass),
                             deltamv.y / (self.mass + R2.mass))
@@ -107,14 +103,18 @@ class Poly(RigidBody):
                 R2.velocity = v2p
 
         elif R2.type == 'Poly':
-            if poly_poly(R2.sides, self.sides):
+            poly1 = self
+            poly1.update(poly1.dt)
+            poly2 = R2
+            poly2.update(poly2.dt)
+            if poly_poly(poly2.sides, poly1.sides):
                 mv1 = self.velocity.multiply(self.mass)
                 mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1.add(mv2)
+                mv = mv1 + mv2
 
-                deltav = self.velocity.subtract(R2.velocity)
+                deltav = self.velocity - R2.velocity
                 deltav.multiplyBy(R2.mass)
-                deltamv = mv.subtract(deltav)
+                deltamv = mv - deltav
 
                 v1p = Vector(deltamv.x / (self.mass + R2.mass),
                             deltamv.y / (self.mass + R2.mass))
@@ -142,11 +142,11 @@ class Circle(RigidBody):
             if dist <= self.r + R2.r:
                 mv1 = self.velocity.multiply(self.mass)
                 mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1.add(mv2)
+                mv = mv1 + mv2
 
-                deltav = self.velocity.subtract(R2.velocity)
+                deltav = self.velocity - R2.velocity
                 deltav.multiplyBy(R2.mass)
-                deltamv = mv.subtract(deltav)
+                deltamv = mv - deltav
 
                 v1p = Vector(deltamv.x / (self.mass + R2.mass),
                             deltamv.y / (self.mass + R2.mass))
@@ -160,11 +160,11 @@ class Circle(RigidBody):
             if poly_circle(R2.sides, self):
                 mv1 = self.velocity.multiply(self.mass)
                 mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1.add(mv2)
+                mv = mv1 + mv2
 
-                deltav = self.velocity.subtract(R2.velocity)
+                deltav = self.velocity - R2.velocity
                 deltav.multiplyBy(R2.mass)
-                deltamv = mv.subtract(deltav)
+                deltamv = mv - deltav
 
                 v1p = Vector(deltamv.x / (self.mass + R2.mass),
                             deltamv.y / (self.mass + R2.mass))
@@ -173,10 +173,10 @@ class Circle(RigidBody):
 
                 self.velocity = v1p
                 R2.velocity = v2p
-
     
     def update(self, dt, edges=True):
         self.dt = dt
+        
         if edges:
             if self.position.y >= 720 - self.r:
                 self.position.y = 720 - self.r

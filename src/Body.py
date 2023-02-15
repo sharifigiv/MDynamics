@@ -42,11 +42,12 @@ class MDynamics:
 
     def calculate_collisions(self):
         """Calculates Collision between bodies"""
+
         keys = list(self.rigidBodies.keys())
+
         for rb1_name in keys:
             for rb2_name in keys[keys.index(rb1_name):]:
                     self.rigidBodies[rb1_name].collision(self.rigidBodies[rb2_name])
-
 
     def are_colliding(self, rb1, rb2):
         """Returns if 2 rigidbodies are colliding"""

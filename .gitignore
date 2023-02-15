@@ -1,2 +1,4 @@
 .vscode
 .idea
+__pycache__
+./examples/__pycache__
