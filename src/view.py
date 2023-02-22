@@ -192,7 +192,8 @@ while not pr.window_should_close():
         if(Physics.rigidBodies[rb].type == 'Poly'):
             for line in Physics.rigidBodies[rb].sides:
                 pr.draw_line(int(line[0].x), int(line[0].y), int(line[1].x), int(line[1].y), pr.BLACK)
-
+        
+    
         elif(Physics.rigidBodies[rb].type == 'Circle'):
             m = Physics.rigidBodies
 

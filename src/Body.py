@@ -49,15 +49,6 @@ class MDynamics:
             for rb2_name in keys[keys.index(rb1_name):]:
                     self.rigidBodies[rb1_name].collision(self.rigidBodies[rb2_name])
 
-    def are_colliding(self, rb1, rb2):
-        """Returns if 2 rigidbodies are colliding"""
-
-        if rb1.position.x + rb1.width > rb2.position.x and rb1.position.x < rb2.position.x + rb2.width and rb1.position.y + rb1.height > rb2.position.y and rb1.position.y < rb2.position.y + rb2.height:
-            return True
-
-        else:
-            return False
-
     def update_rigid_bodies(self, dt: float):
         """Updates all rigid bodies position"""
 
@@ -70,14 +61,3 @@ class MDynamics:
                 RigidBody_object.applyForce(Vector(0, 98.1 * RigidBody_object.mass))
 
             RigidBody_object.update(dt)
-
-    def update(self, rb, dt):
-        """Update this rigid body position"""
-
-        if self.drag:
-            rb.drag(self.dragv)
-
-        if self.gravity:
-            rb.applyForce(Vector(0, 9.81 * rb.mass))
-
-        rb.update(dt)
