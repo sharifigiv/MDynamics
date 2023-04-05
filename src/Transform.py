@@ -1,6 +1,6 @@
 from Vector import *
 from Collision import *
-
+# from Const import *
 
 class RigidBody:
     def __init__(self, mass, position):
@@ -79,6 +79,7 @@ class Poly(RigidBody):
                 sumy += side[1].y
                 points.append(side[1])
         self.center = Vector(sumx/len(points), sumy/len(points))
+        # self.inertia = calculate_inertia(self)
 
     def update(self, dt, edges=True):
         self.dt = dt
