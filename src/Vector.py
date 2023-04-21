@@ -27,6 +27,10 @@ class Vector:
 
     def __sub__(self, v2):
         return Vector(self.x - v2.x, self.y - v2.y)
+    def __mul__(self, n):
+        return Vector(self.x * n, self.y * n)
+    def __div__(self, n):
+        return Vector(self.x / n, self.y / n)
 
     def subtractFrom(self, v2):
         self.x -= v2.x

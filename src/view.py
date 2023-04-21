@@ -28,7 +28,7 @@ while not pr.window_should_close():
     if pr.is_mouse_button_down(0):
         mouse_pos[0] = pr.get_mouse_x()
         mouse_pos[1] = pr.get_mouse_y()
-
+        
     if key == 51:  
         i += 1
         sides = []
@@ -168,7 +168,7 @@ while not pr.window_should_close():
 
             line_last = last_point_2 - last_point_1
             final_point = line_last + last_point_2
-
+                    
             final_line = rotate(last_point_2, final_point, -60)
             sides.append([last_point_2, final_line])
 
@@ -183,7 +183,6 @@ while not pr.window_should_close():
             paused = False
         else:
             paused = True  
-
     if not paused:
         Physics.calculate_collisions()
         Physics.update_rigid_bodies(dt)

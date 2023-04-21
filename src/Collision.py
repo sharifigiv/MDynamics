@@ -1,4 +1,5 @@
 from Vector import Vector
+import pyray as pr
 
 def line_point(line_point1, line_point2, point):
     distance1 = (((line_point1.x - point.x) ** 2) +
@@ -21,12 +22,18 @@ def line_line(point1, point2, point3, point4):
     uB = ((point2.x - point1.x) * (point1.y - point3.y) - (point2.y - point1.y) * (point1.x - point3.x)) / \
         (((point4.y - point3.y) * (point2.x - point1.x) -
          (point4.x - point3.x) * (point2.y - point1.y))+0.0000001)
-
+    
     if (uA >= 0 and uA <= 1 and uB >= 0 and uB <= 1):
-        return True
+        intersection = Vector(point1.x + (uA * (point2.x - point1.x)), point1.y + (uA * (point2.y - point1.y)))
+        middle = Vector((point4.x - point3.x) // 2, (point4.y - point3.y) // 2)
+        middle2 = Vector((point2.x - point1.x) // 2, (point2.y - point1.y) // 2)
+
+        final = (middle.x - intersection.x) ** 2 + (middle.y - intersection.y) ** 2
+        final2 = (middle2.x - intersection.x) ** 2 + (middle2.y - intersection.y) ** 2
+        return True, final, final2
 
     else:
-        return False
+        return False, 0, 0
 
 def poly_point(vertices, point):
     collision = False
@@ -59,11 +66,12 @@ def poly_line(vertices, point1, point2):
         point3 = vertices[current]
         point4 = vertices[next]
 
-        collide = line_line(point1, point2, point3[0], point3[1])
-        if collide:
-            return True
+        collide, final1, final2= line_line(point1, point2, point3[0], point3[1])
 
-    return False
+        if collide:
+            return True, final1, final2
+
+    return False, 0, 0
 
 def poly_poly(poly1, poly2):
     next = 0
@@ -76,11 +84,11 @@ def poly_poly(poly1, poly2):
         vc = poly1[current]
         vn = poly1[next]
 
-        collide = poly_line(poly2, vc[0], vc[1])
+        collide, final1, final2 = poly_line(poly2, vc[0], vc[1])
         if collide:
-            return True
+            return True, final1, final2
 
-    return False
+    return False, 0, 0
 
 def circle_point(point, circle):
     
@@ -108,7 +116,7 @@ def circle_line(point1, point2, circle):
     closesty = point1.y + (dot * (point2.y - point1.y))
     closest = Vector(closestx, closesty)
 
-    onSegment = line_point(point1, point2, closest)
+    onSegment, length = line_point(point1, point2, closest)
     if not onSegment:
         return False
 
