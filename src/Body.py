@@ -59,4 +59,5 @@ class MDynamics:
 
             if self.gravity:
                 RigidBody_object.applyForce(Vector(0, 98.1 * RigidBody_object.mass))
+                
             RigidBody_object.update(dt)

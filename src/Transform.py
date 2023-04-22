@@ -2,7 +2,6 @@ from Vector import *
 from Collision import *
 from Const import *
 
-
 class RigidBody:
     def __init__(self, mass, position):
         self.mass = mass
@@ -44,6 +43,7 @@ class RigidBody:
                 r = (line[0] + line[1]) / 2
                 r = point - r
                 r.getMagnitude()
+                
                 break
 
         self.angular_acceleration = (F * r) / I
@@ -190,15 +190,16 @@ class Classic_Poly(RigidBody):
                 self.angular_acceleration = Vector(0,(
                     f1 * final1) / self.inertia * 100000)
 
-
 class Poly(RigidBody):
     def __init__(self, sides, mass, position):
-        self.sides=sides
-        self.type='Poly'
+        self.sides = sides
+        self.type = 'Poly'
+        
         RigidBody.__init__(self, mass, position)
-        sum_x=0
-        sum_y=0
-        points=[]
+        
+        sum_x = 0
+        sum_y = 0
+        points = []
 
         gaz=40
 
@@ -213,6 +214,7 @@ class Poly(RigidBody):
                 sum_x += side[1].x
                 sum_y += side[1].y
                 points.append(side[1])
+                
         self.center=Vector(sum_x/len(points), sum_y/len(points))
         self.inertia=calculate_inertia(self, gaz)
 
@@ -246,8 +248,6 @@ class Poly(RigidBody):
         # self.sides[len(self.sides)-1][1].x += self.velocity.x * dt
         # self.sides[len(self.sides)-1][1].y += self.velocity.y * dt
 
-
-
         self.angular_velocity += self.angular_acceleration.y * dt
         for line in self.sides:
             for point in line:
@@ -259,20 +259,15 @@ class Poly(RigidBody):
                 point.y += self.velocity.y * dt
         self.center += Vector(self.velocity.x * dt, self.velocity.y * dt)
 
-
-
-
-
-
         self.acceleration=Vector(0, 0)
         self.angular_acceleration=Vector(0, 0)
 
     def collision(self, R2):
         if R2.type == 'Circle':
             if poly_circle(self.sides, R2):
-                mv1=self.velocity.multiply(self.mass)
-                mv2=R2.velocity.multiply(R2.mass)
-                mv=mv1 + mv2
+                mv1 = self.velocity.multiply(self.mass)
+                mv2 = R2.velocity.multiply(R2.mass)
+                mv = mv1 + mv2
 
                 deltav=self.velocity - R2.velocity
                 deltav.multiplyBy(R2.mass)

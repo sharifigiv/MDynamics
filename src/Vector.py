@@ -20,17 +20,19 @@ class Vector:
 
     def __add__(self, v2):
         return Vector(self.x + v2.x, self.y + v2.y)
+    
+    def __sub__(self, v2):
+        return Vector(self.x - v2.x, self.y - v2.y)
+    
+    def __mul__(self, n):
+        return Vector(self.x * n, self.y * n)
+    
+    def __div__(self, n):
+        return Vector(self.x / n, self.y / n)
 
     def addTo(self, v2):
         self.x += v2.x
         self.y += v2.y
-
-    def __sub__(self, v2):
-        return Vector(self.x - v2.x, self.y - v2.y)
-    def __mul__(self, n):
-        return Vector(self.x * n, self.y * n)
-    def __div__(self, n):
-        return Vector(self.x / n, self.y / n)
 
     def subtractFrom(self, v2):
         self.x -= v2.x
@@ -67,4 +69,5 @@ def rotate(origin, point, angle):
 
     qx = ox + cos(angle) * (px - ox) - sin(angle) * (py - oy)
     qy = oy + sin(angle) * (px - ox) + cos(angle) * (py - oy)
+    
     return Vector(qx, qy)

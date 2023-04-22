@@ -28,6 +28,8 @@ while not pr.window_should_close():
     if pr.is_mouse_button_down(0):
         mouse_pos[0] = pr.get_mouse_x()
         mouse_pos[1] = pr.get_mouse_y()
+    if key != 0:
+        print(key)
         
     if key == 51:  
         i += 1
@@ -155,6 +157,8 @@ while not pr.window_should_close():
             sides.append([last_point_2, final_line])
 
         Physics.poly_rigidBody('poly' + str(i), mouse_pos[0], mouse_pos[1], 30,sides)
+    if key == 48:
+        Physics.rigidBodies['poly' + str(i)].applyForce(Vector(100000,100000))
 
     if key == 82:
         i += 1
