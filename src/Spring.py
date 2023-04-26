@@ -4,8 +4,9 @@ import pyray as pr
 import math
 
 SPRING_LENGTH = 100
-SPRING_K = 0.1
-SPRING_DAMPING = 0.07
+SPRING_K = 50
+SPRING_DAMPING = 0.2
+
 
 class Spring:
     def __init__(self, node1, node2):
@@ -14,13 +15,12 @@ class Spring:
         self.length = SPRING_LENGTH
         self.k = SPRING_K
         self.damping = SPRING_DAMPING
-        
+
     def update(self):
         dx = self.particle2.position.x - self.particle1.position.x
         dy = self.particle2.position.y - self.particle1.position.y
         distance = math.sqrt(dx*dx + dy*dy)
         force = self.k * (distance - self.length)
-
 
         relativeVelocityX = self.particle2.velocity.x - self.particle1.velocity.x
         relativeVelocityY = self.particle2.velocity.y - self.particle1.velocity.y
@@ -35,7 +35,8 @@ class Spring:
         self.particle2.applyForce(Vector(-dampingForceX, -dampingForceY))
 
         self.particle2.applyForce(Vector(-fx, -fy))
-             
+
+
 pr.init_window(1080, 720, "Soft Body Boiii")
 
 C1 = Circle(10, 1, Vector(100, 100))
@@ -72,9 +73,13 @@ while not pr.window_should_close():
     pr.draw_circle(int(C3.position.x), int(C3.position.y), C3.r, pr.WHITE)
     pr.draw_circle(int(C4.position.x), int(C4.position.y), C4.r, pr.WHITE)
 
-    pr.draw_line(int(S1.particle1.position.x), int(S1.particle1.position.y), int(S1.particle2.position.x), int(S1.particle2.position.y), pr.WHITE)
-    pr.draw_line(int(S2.particle1.position.x), int(S2.particle1.position.y), int(S2.particle2.position.x), int(S2.particle2.position.y), pr.WHITE)
-    pr.draw_line(int(S3.particle1.position.x), int(S3.particle1.position.y), int(S3.particle2.position.x), int(S3.particle2.position.y), pr.WHITE)
-    pr.draw_line(int(S4.particle1.position.x), int(S4.particle1.position.y), int(S4.particle2.position.x), int(S4.particle2.position.y), pr.WHITE)
+    pr.draw_line(int(S1.particle1.position.x), int(S1.particle1.position.y), int(
+        S1.particle2.position.x), int(S1.particle2.position.y), pr.WHITE)
+    pr.draw_line(int(S2.particle1.position.x), int(S2.particle1.position.y), int(
+        S2.particle2.position.x), int(S2.particle2.position.y), pr.WHITE)
+    pr.draw_line(int(S3.particle1.position.x), int(S3.particle1.position.y), int(
+        S3.particle2.position.x), int(S3.particle2.position.y), pr.WHITE)
+    pr.draw_line(int(S4.particle1.position.x), int(S4.particle1.position.y), int(
+        S4.particle2.position.x), int(S4.particle2.position.y), pr.WHITE)
 
     pr.end_drawing()

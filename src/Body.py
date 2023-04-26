@@ -1,6 +1,7 @@
 from Transform import *
 from Vector import Vector
 
+
 class MDynamics:
     def __init__(self):
         """ Initializes the physics engine"""
@@ -16,7 +17,7 @@ class MDynamics:
         self.friction = True
         self.mu = -1
 
-    def poly_rigidBody(self, name:str, x: int, y: int, mass: int, sides: list):
+    def poly_rigidBody(self, name: str, x: int, y: int, mass: int, sides: list):
         """ Creates a rectangle rigid body"""
 
         if mass < 0:
@@ -24,7 +25,7 @@ class MDynamics:
 
         elif mass > 999999999999999999:
             Exception('mass should be smaller than 999999999999999999')
-        
+
         else:
             self.rigidBodies[name] = Poly(sides, mass, Vector(x, y))
 
@@ -36,7 +37,7 @@ class MDynamics:
 
         elif mass > 999999999999999999:
             Exception('mass should be smaller than 999999999999999999')
-        
+
         else:
             self.rigidBodies[name] = Circle(radius, mass, Vector(x, y))
 
@@ -46,8 +47,9 @@ class MDynamics:
         keys = list(self.rigidBodies.keys())
 
         for rb1_name in keys:
-            for rb2_name in keys[keys.index(rb1_name):]:
-                    self.rigidBodies[rb1_name].collision(self.rigidBodies[rb2_name])
+            for rb2_name in keys[keys.index(rb1_name)+1:]:
+                self.rigidBodies[rb1_name].collision(
+                    self.rigidBodies[rb2_name])
 
     def update_rigid_bodies(self, dt: float):
         """Updates all rigid bodies position"""
@@ -58,6 +60,7 @@ class MDynamics:
                 RigidBody_object.drag(self.dragv)
 
             if self.gravity:
-                RigidBody_object.applyForce(Vector(0, 98.1 * RigidBody_object.mass))
-                
+                RigidBody_object.applyForce(
+                    Vector(0, 98.1 * RigidBody_object.mass))
+
             RigidBody_object.update(dt)
