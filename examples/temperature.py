@@ -15,6 +15,7 @@ HEIGHT = 600
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 temperature = 100
 physics = MDynamics.MDynamics()
+physics.gravity = False
 
 for i in range(50):
     physics.circle_rigidbody(str(i), random.randint(0, WIDTH), random.randint(0, HEIGHT), 5, 1)
