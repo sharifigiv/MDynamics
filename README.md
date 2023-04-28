@@ -14,4 +14,9 @@ A Mayami Physics Simulator
 <br />
 
 ![Demo](assets/screen1.png?raw=true "Demo")
+
+<br />
+
 ![Collision](assets/vid1.gif?raw=true "Collision")
+
+### Examples
