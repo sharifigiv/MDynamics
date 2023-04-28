@@ -23,3 +23,6 @@ A Mayami Physics Simulator
 ![Temperature](assets/example1.gif?raw=true "Temperature")
 
 <br />
+
+![Rope](assets/examplew.gif?raw=true "Rope")
+
