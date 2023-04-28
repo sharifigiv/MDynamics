@@ -27,3 +27,6 @@ You can simulate rigid bodies and soft bodies!
 
 ![Rope](assets/example2.gif?raw=true "Rope")
 
+<br />
+
+![Soft Body](assets/example3.gif?raw=true "Soft Body")
