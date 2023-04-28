@@ -24,5 +24,5 @@ A Mayami Physics Simulator
 
 <br />
 
-![Rope](assets/examplew.gif?raw=true "Rope")
+![Rope](assets/example2.gif?raw=true "Rope")
 
