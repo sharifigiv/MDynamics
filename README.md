@@ -20,3 +20,6 @@ A Mayami Physics Simulator
 ![Collision](assets/vid1.gif?raw=true "Collision")
 
 ### Examples
+![Temperature](assets/example1.gif?raw=true "Temperature")
+
+<br />
