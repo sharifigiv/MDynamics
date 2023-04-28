@@ -28,6 +28,7 @@ class MDynamics:
 
         else:
             self.rigidBodies[name] = Poly(sides, mass, Vector(x, y))
+            return self.rigidBodies[name]
 
     def circle_rigidbody(self, name: str, x: int, y: int, radius: float, mass: int):
         """ Creates a circle rigid body"""
@@ -40,6 +41,8 @@ class MDynamics:
 
         else:
             self.rigidBodies[name] = Circle(radius, mass, Vector(x, y))
+
+            return self.rigidBodies[name]
 
     def calculate_collisions(self):
         """Calculates Collision between bodies"""
