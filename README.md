@@ -1,7 +1,8 @@
 # MDynamics
 Physics Simulator
 
-A Mayami Physics Simulator
+A Mayami Physics Simulator.
+You can simulate rigid bodies and soft bodies!
 
 <br />
 
