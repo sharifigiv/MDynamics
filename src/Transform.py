@@ -1,405 +1,69 @@
-from Vector import *
-from Collision import *
-from Const import *
+from Transform import *
+from Vector import Vector
 
 
-class RigidBody:
-    def __init__(self, mass, position):
-        self.mass = mass
+class MDynamics:
+    def __init__(self):
+        """ Initializes the physics engine"""
 
-        self.position = position
+        self.rigidBodies = {}
 
-        self.n_colliders = 0
+        self.drag = True
+        self.dragv = 6
 
-        self.velocity = Vector(0, 0)
-        self.acceleration = Vector(0, 0)
+        self.gravity = True
+        self.g = 98.1
 
-        self.angular_velocity = 0
-        self.angular_acceleration = Vector(0, 0)
+        self.friction = True
+        self.mu = -1
 
-        self.mu = 0.8
+    def poly_rigidBody(self, name: str, x: int, y: int, mass: int, sides: list):
+        """ Creates a rectangle rigid body"""
 
-        self.dt = 0
+        if mass < 0:
+            Exception("mass should be at least 1")
 
-    def applyForce(self, force):
-        # f = m * a
-        # a = f / m
+        elif mass > 999999999999999999:
+            Exception('mass should be smaller than 999999999999999999')
 
-        self.acceleration.x += force.x / self.mass
-        self.acceleration.y += force.y / self.mass
+        else:
+            self.rigidBodies[name] = Poly(sides, mass, Vector(x, y))
+            return self.rigidBodies[name]
 
-    def applyAngularForce(self, force, point):
-        # a = (F * r) / 2
-        self.acceleration.x += force.x / self.mass
-        self.acceleration.y += force.y / self.mass
+    def circle_rigidbody(self, name: str, x: int, y: int, radius: float, mass: int):
+        """ Creates a circle rigid body"""
 
-        r = 0
-        F = 0
+        if mass < 0:
+            Exception("mass should be at least 1")
 
-        a = (self.sides[0][1] - self.sides[0][0])
-        a = a.getMagnitude()
+        elif mass > 999999999999999999:
+            Exception('mass should be smaller than 999999999999999999')
 
-        I = (a ** 4) / 6
+        else:
+            self.rigidBodies[name] = Circle(radius, mass, Vector(x, y))
 
-        for line in self.sides:
-            if line_point(line[0], line[1], point):
-                r = (line[0] + line[1]) / 2
-                r = point - r
-                r.getMagnitude()
+            return self.rigidBodies[name]
 
-                break
+    def calculate_collisions(self):
+        """Calculates Collision between bodies"""
 
-        self.angular_acceleration = (F * r) / I
+        keys = list(self.rigidBodies.keys())
 
-    def drag(self, c):
-        drag_direction = self.velocity
-        drag_direction.multiply(-1)
-        drag_direction = drag_direction.normalize()
+        for rb1_name in keys:
+            for rb2_name in keys[keys.index(rb1_name)+1:]:
+                self.rigidBodies[rb1_name].collision(
+                    self.rigidBodies[rb2_name])
 
-        speed_sq = drag_direction.getMagnitude()
-        drag_direction.setMagnitude(c * speed_sq * -1)
+    def update_rigid_bodies(self, dt: float):
+        """Updates all rigid bodies position"""
 
-        self.applyForce(drag_direction)
+        for rb in list(self.rigidBodies.keys()):
+            RigidBody_object = self.rigidBodies[rb]
+            if self.drag:
+                RigidBody_object.drag(self.dragv)
 
-    def friction(self, mu):
-        friction = Vector(0, self.mass * 9.81)
-        friction.multiplyBy(mu)
-        friction.multiplyBy(-1)
+            if self.gravity:
+                RigidBody_object.applyForce(
+                    Vector(0, 98.1 * RigidBody_object.mass))
 
-        self.applyForce(friction)
-
-
-class Classic_Poly(RigidBody):
-    def __init__(self, sides, mass, position):
-        self.sides = sides
-        self.type = 'Poly'
-        RigidBody.__init__(self, mass, position)
-        sum_x = 0
-        sum_y = 0
-        points = []
-
-        gaz = (self.sides[0][0].x - self.sides[0][1].x) ** 2 + \
-            (self.sides[0][0].y - self.sides[0][1].y) ** 2
-
-        for side in sides:
-            if side[0] not in points:
-                sum_x += side[0].x
-
-                sum_y += side[0].y
-                points.append(side[0])
-
-            if side[1] not in points:
-                sum_x += side[1].x
-                sum_y += side[1].y
-                points.append(side[1])
-        self.center = Vector(sum_x/len(points), sum_y/len(points))
-
-    def update(self, dt, edges=True):
-        self.dt = dt
-
-        if self.sides[0][0].y >= 720:
-            self.friction(self.mu)
-            self.velocity.y *= -1
-
-        # if poly_line(self.sides, Vector(0, 0), Vector(1280, 0)):
-        #     self.friction(self.mu)
-        #     self.velocity.y *= -1
-
-        # if poly_line(self.sides, Vector(1280, 0), Vector(1280, 720)):
-        #     self.friction(self.mu)
-        #     self.velocity.x *= -1
-
-        # if poly_line(self.sides, Vector(0, 0), Vector(0, 720)):
-        #     self.friction(self.mu)
-        #     self.velocity.x *= -1
-
-        self.velocity.x += self.acceleration.x * dt
-        self.velocity.y += self.acceleration.y * dt
-
-        self.position.x += self.velocity.x * dt
-        self.position.y += self.velocity.y * dt
-
-        self.sides[0][0].x += self.velocity.x * dt
-        self.sides[0][0].y += self.velocity.y * dt
-
-        self.sides[len(self.sides)-1][1].x += self.velocity.x * dt
-        self.sides[len(self.sides)-1][1].y += self.velocity.y * dt
-
-        self.angular_velocity += self.angular_acceleration.y * dt
-        self.angular_velocity += self.angular_acceleration.x * dt
-
-        for line in self.sides:
-            for point in line:
-                point.x += self.velocity.x * dt
-                point.y += self.velocity.y * dt
-        self.center += Vector(self.velocity.x * dt, self.velocity.y * dt)
-
-        for line in self.sides:
-            for point in line:
-                point2 = rotate(self.center, point, self.angular_velocity)
-                line[line.index(point)] = point2
-
-        self.acceleration = Vector(0, 0)
-        self.angular_acceleration = Vector(0, 0)
-
-    def collision(self, R2):
-        if R2.type == 'Circle':
-            if poly_circle(self.sides, R2):
-                mv1 = self.velocity.multiply(self.mass)
-                mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1 + mv2
-
-                deltav = self.velocity - R2.velocity
-                deltav.multiplyBy(R2.mass)
-                deltamv = mv - deltav
-
-                v1p = Vector(deltamv.x / (self.mass + R2.mass),
-                             deltamv.y / (self.mass + R2.mass))
-                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
-                             self.velocity.y + v1p.y - R2.velocity.y)
-
-                self.velocity = v1p
-                R2.velocity = v2p
-
-        elif R2.type == 'Poly':
-            poly1 = self
-            poly1.update(poly1.dt)
-
-            poly2 = R2
-            poly2.update(poly2.dt)
-            collide, final1, final2 = poly_poly(poly2.sides, poly1.sides)
-            if collide:
-                mv1 = self.velocity.multiply(self.mass)
-                mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1 + mv2
-
-                deltav = self.velocity - R2.velocity
-                deltav.multiplyBy(R2.mass)
-                deltamv = mv - deltav
-
-                v1p = Vector(deltamv.x / (self.mass + R2.mass),
-                             deltamv.y / (self.mass + R2.mass))
-                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
-                             self.velocity.y + v1p.y - R2.velocity.y)
-
-                f1 = (v1p - self.velocity).divide(self.mass)
-                f2 = (v2p - R2.velocity).divide(R2.mass)
-
-                self.velocity = v1p
-                R2.velocity = v2p
-
-                R2.angular_acceleration = Vector(
-                    0, (f2 * final2) / R2.inertia * 1000000)
-                self.angular_acceleration = Vector(0, (
-                    f1 * final1) / self.inertia * 100000)
-
-
-class Poly(RigidBody):
-    def __init__(self, sides, mass, position):
-        self.sides = sides
-        self.type = 'Poly'
-
-        RigidBody.__init__(self, mass, position)
-
-        sum_x = 0
-        sum_y = 0
-        points = []
-
-        gaz = 40
-
-        for side in sides:
-            if side[0] not in points:
-                sum_x += side[0].x
-
-                sum_y += side[0].y
-                points.append(side[0])
-
-            if side[1] not in points:
-                sum_x += side[1].x
-                sum_y += side[1].y
-                points.append(side[1])
-
-        self.center = Vector(sum_x/len(points), sum_y/len(points))
-        self.inertia = calculate_inertia(self, gaz)
-
-    def update(self, dt, edges=True):
-        self.dt = dt
-
-        if self.sides[0][0].y >= 720:
-            self.friction(self.mu)
-            self.velocity.y *= -1
-
-        # if poly_line(self.sides, Vector(0, 0), Vector(1280, 0)):
-        #     self.friction(self.mu)
-        #     self.velocity.y *= -1
-
-        # if poly_line(self.sides, Vector(1280, 0), Vector(1280, 720)):
-        #     self.friction(self.mu)
-        #     self.velocity.x *= -1
-
-        # if poly_line(self.sides, Vector(0, 0), Vector(0, 720)):
-        #     self.friction(self.mu)
-        #     self.velocity.x *= -1
-        self.velocity.x += self.acceleration.x * dt
-        self.velocity.y += self.acceleration.y * dt
-
-        self.position.x += self.velocity.x * dt
-        self.position.y += self.velocity.y * dt
-
-        # self.sides[0][0].x += self.velocity.x * dt
-        # self.sides[0][0].y += self.velocity.y * dt
-
-        # self.sides[len(self.sides)-1][1].x += self.velocity.x * dt
-        # self.sides[len(self.sides)-1][1].y += self.velocity.y * dt
-
-        self.angular_velocity += self.angular_acceleration.y * dt
-        for line in self.sides:
-            for point in line:
-                point2 = rotate(self.center, point, self.angular_velocity)
-                line[line.index(point)] = point2
-        for line in self.sides:
-            for point in line:
-                point.x += self.velocity.x * dt
-                point.y += self.velocity.y * dt
-        self.center += Vector(self.velocity.x * dt, self.velocity.y * dt)
-
-        self.acceleration = Vector(0, 0)
-        self.angular_acceleration = Vector(0, 0)
-
-    def collision(self, R2):
-        if R2.type == 'Circle':
-            if poly_circle(self.sides, R2):
-                mv1 = self.velocity.multiply(self.mass)
-                mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1 + mv2
-
-                deltav = self.velocity - R2.velocity
-                deltav.multiplyBy(R2.mass)
-                deltamv = mv - deltav
-
-                v1p = Vector(deltamv.x / (self.mass + R2.mass),
-                             deltamv.y / (self.mass + R2.mass))
-                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
-                             self.velocity.y + v1p.y - R2.velocity.y)
-
-                self.velocity = v1p
-                R2.velocity = v2p
-
-        elif R2.type == 'Poly':
-            poly1 = self
-            poly1.update(poly1.dt)
-
-            poly2 = R2
-            poly2.update(poly2.dt)
-            collide, final1, final2 = poly_poly(poly2.sides, poly1.sides)
-            if collide:
-                self.n_colliders += 1
-
-                # print(self.n_colliders)
-                print(self.velocity.x, self.velocity.y, '1')
-                print(R2.velocity.x, R2.velocity.y, '2')
-
-                mv1 = self.velocity.multiply(self.mass)
-                mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1 + mv2
-
-                deltav = self.velocity - R2.velocity
-                deltav.multiplyBy(R2.mass)
-                deltamv = mv - deltav
-
-                v1p = Vector(deltamv.x / (self.mass + R2.mass),
-                             deltamv.y / (self.mass + R2.mass))
-                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
-                             self.velocity.y + v1p.y - R2.velocity.y)
-
-                f1 = (v1p - self.velocity).divide(self.mass)
-                f2 = (v2p - R2.velocity).divide(R2.mass)
-
-                self.velocity = v1p
-                R2.velocity = v2p
-
-                R2.angular_acceleration = (f2 * final2).divide(R2.inertia)
-                self.angular_acceleration = (f1 * final1).divide(self.inertia)
-
-
-class Circle(RigidBody):
-    def __init__(self, r, mass, position):
-        self.r = r
-        self.type = 'Circle'
-        RigidBody.__init__(self, mass, position)
-
-    def collision(self, R2):
-        if R2.type == 'Circle':
-            p1 = self.position
-            p2 = R2.position
-
-            dx = p1.x - p2.x
-            dy = p1.y - p2.y
-            dist = (dx**2 + dy**2)**0.5
-
-            if dist <= self.r + R2.r:
-                mv1 = self.velocity.multiply(self.mass)
-                mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1 + mv2
-
-                deltav = self.velocity - R2.velocity
-                deltav.multiplyBy(R2.mass)
-                deltamv = mv - deltav
-
-                v1p = Vector(deltamv.x / (self.mass + R2.mass),
-                             deltamv.y / (self.mass + R2.mass))
-                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
-                             self.velocity.y + v1p.y - R2.velocity.y)
-
-                self.velocity = v1p
-                R2.velocity = v2p
-
-        elif R2.type == 'Poly':
-            if poly_circle(R2.sides, self):
-                mv1 = self.velocity.multiply(self.mass)
-                mv2 = R2.velocity.multiply(R2.mass)
-                mv = mv1 + mv2
-
-                deltav = self.velocity - R2.velocity
-                deltav.multiplyBy(R2.mass)
-                deltamv = mv - deltav
-
-                v1p = Vector(deltamv.x / (self.mass + R2.mass),
-                             deltamv.y / (self.mass + R2.mass))
-                v2p = Vector(self.velocity.x + v1p.x - R2.velocity.x,
-                             self.velocity.y + v1p.y - R2.velocity.y)
-
-                self.velocity = v1p
-                R2.velocity = v2p
-
-    def update(self, dt, edges=True):
-        self.dt = dt
-
-        if edges:
-            if self.position.y >= 720 - self.r:
-                self.position.y = 720 - self.r
-                self.friction(self.mu)
-                self.velocity.y *= -1
-
-            if self.position.x >= 1080 - self.r:
-                self.position.x = 1080 - self.r
-                self.friction(self.mu)
-                self.velocity.x *= -1
-
-            if self.position.x <= 0:
-                self.position.x = 0
-                self.friction(self.mu)
-                self.velocity.x *= -1
-
-            if self.position.y <= 0:
-                self.position.y = 0
-                self.friction(self.mu)
-                self.velocity.y *= -1
-
-        self.velocity.x += self.acceleration.x * dt
-        self.velocity.y += self.acceleration.y * dt
-
-        self.position.x += self.velocity.x * dt
-        self.position.y += self.velocity.y * dt
-
-        self.acceleration = Vector(0, 0)
+            RigidBody_object.update(dt)
