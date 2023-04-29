@@ -20,6 +20,10 @@ You can simulate rigid bodies and soft bodies!
 
 ![Collision](assets/vid1.gif?raw=true "Collision")
 
+<br />
+
+![Circles](assets/example4.gif?raw=true "Circles")
+
 ### Examples
 ![Temperature](assets/example1.gif?raw=true "Temperature")
 
@@ -30,3 +34,7 @@ You can simulate rigid bodies and soft bodies!
 <br />
 
 ![Soft Body](assets/example3.gif?raw=true "Soft Body")
+
+<br />
+
+![Planets](assets/example5.gif?raw=true "Planets")
