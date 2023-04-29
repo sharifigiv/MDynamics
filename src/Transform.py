@@ -97,9 +97,10 @@ class Classic_Poly(RigidBody):
     def update(self, dt, edges=True):
         self.dt = dt
 
-        if self.sides[0][0].y >= 720:
-            self.friction(self.mu)
-            self.velocity.y *= -1
+        if edges:
+            if self.sides[0][0].y >= 720:
+                self.friction(self.mu)
+                self.velocity.y *= -1
 
         # if poly_line(self.sides, Vector(0, 0), Vector(1280, 0)):
         #     self.friction(self.mu)
@@ -225,9 +226,10 @@ class Poly(RigidBody):
     def update(self, dt, edges=True):
         self.dt = dt
 
-        if self.sides[0][0].y >= 720:
-            self.friction(self.mu)
-            self.velocity.y *= -1
+        if edges:
+            if self.sides[0][0].y >= 720:
+                self.friction(self.mu)
+                self.velocity.y *= -1
 
         # if poly_line(self.sides, Vector(0, 0), Vector(1280, 0)):
         #     self.friction(self.mu)
