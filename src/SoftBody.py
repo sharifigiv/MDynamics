@@ -3,12 +3,12 @@ from Vector import Vector, rotate
 from Spring import Spring
 import pyray as pr 
 
-pr.init_window(1080, 720, "Soft Body")
+# pr.init_window(1080, 720, "Soft Body")
 
 class SoftBody:
     def __init__(self, length: int, particle_column: int, particle_row: int, start_pos: Vector, phy: MDynamics):
         self.length = length
-        self.k = 50
+        self.k = 10
         self.damping = 0.4
 
         self.particle_column = particle_column
@@ -49,25 +49,25 @@ class SoftBody:
         for spring in self.springs:
             pr.draw_line(int(spring.particle1.position.x), int(spring.particle1.position.y), int(spring.particle2.position.x), int(spring.particle2.position.y), pr.WHITE)
 
-p = MDynamics()
+# p = MDynamics()
 
-s = SoftBody(50, 2, 4, Vector(100, 100), p)
-s.create_particles()
-s.create_springs()
+# s = SoftBody(50, 3, 3, Vector(100, 100), p)
+# s.create_particles()
+# s.create_springs()
 
-print(len(s.springs))
+# print(len(s.springs))
 
-while not pr.window_should_close():
-    pr.begin_drawing()
-    pr.clear_background(pr.BLACK)
+# while not pr.window_should_close():
+#     pr.begin_drawing()
+#     pr.clear_background(pr.BLACK)
 
-    p.calculate_collisions()
-    p.update_rigid_bodies(0.0009)
+#     p.calculate_collisions()
+#     p.update_rigid_bodies(0.0009)
 
-    s.update_springs()
+#     s.update_springs()
 
-    s.draw_particles()
-    s.draw_springs()
+#     s.draw_particles()
+#     s.draw_springs()
     
 
-    pr.end_drawing()
+#     pr.end_drawing()
