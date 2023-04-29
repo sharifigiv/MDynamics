@@ -5,8 +5,7 @@ import src.Vector as vec
 import src.Spring as Spring
 import src.Body as MDynamics
 import src.Collision as collision
-import pyray as pr 
-import pygame
+import pyray as pr
 import random
 
 WIDTH = 800
@@ -36,7 +35,7 @@ while not pr.window_should_close():
         rb.velocity.x = random.randint(-temperature, temperature)
         rb.velocity.y = random.randint(-temperature, temperature)
     
-    physics.update_rigid_bodies(0.003)
+    physics.update_rigid_bodies(0.005)
 
     pr.begin_drawing()
     pr.clear_background(pr.BLACK)
