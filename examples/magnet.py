@@ -55,7 +55,5 @@ while not pr.window_should_close():
             pr.draw_circle(int(rb.position.x), int(rb.position.y), rb.r, (255, 90, 25))
         if (rb.type == 'Poly'):
             for line in rb.sides:
-                # pr.draw_line(int(line[0].x), int(line[0].y), int(
-                #     line[1].x), int(line[1].y), (1, 46, 101))
-                pr.draw_line_ex(pr.Vector2(line[0].x, line[0].y), pr.Vector2(line[1].x, line[1].y), 5, (1, 46, 101))
+                pr.draw_line_ex(pr.Vector2(line[0].x, line[0].y), pr.Vector2(line[1].x, line[1].y), 5, (1, 46, 151))
     pr.end_drawing()
