@@ -46,3 +46,7 @@ You can simulate rigid bodies and soft bodies!
 <br />
 
 ![Planets](assets/example7.gif?raw=true "Magnet")
+
+<br />
+
+![Planets](assets/example8.gif?raw=true "Masses and Springs")
