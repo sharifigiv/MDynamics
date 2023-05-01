@@ -36,10 +36,10 @@ def line_line(point1, point2, point3, point4):
             (middle.y - intersection.y) ** 2
         final2 = (middle2.x - intersection.x) ** 2 + \
             (middle2.y - intersection.y) ** 2
-        return True, final, final2
+        return True, intersection, final, final2
 
     else:
-        return False, 0, 0
+        return False, Vector(0,0), 0, 0
 
 
 def poly_point(vertices, point):
@@ -74,13 +74,13 @@ def poly_line(vertices, point1, point2):
         point3 = vertices[current]
         point4 = vertices[next]
 
-        collide, final1, final2 = line_line(
+        collide, point,final1, final2 = line_line(
             point1, point2, point3[0], point3[1])
 
         if collide:
-            return True, final1, final2
+            return True, point, final1, final2
 
-    return False, 0, 0
+    return False, Vector(0,0), 0, 0
 
 
 def poly_poly(poly1, poly2):
@@ -94,17 +94,17 @@ def poly_poly(poly1, poly2):
         vc = poly1[current]
         vn = poly1[next]
 
-        collide, final1, final2 = poly_line(poly2, vc[0], vc[1])
+        collide, point, final1, final2 = poly_line(poly2, vc[0], vc[1])
         if collide:
-            return True, final1, final2
+            return True, point, final1, final2
 
-    return False, 0, 0
+    return False, Vector(0,0), 0, 0
 
 
 def circle_point(point, circle):
 
     distance = (((point.x - circle.position.x) ** 2) +
-                ((point.x - circle.position.x) ** 2)) ** 0.5
+                ((point.y - circle.position.y) ** 2)) ** 0.5
 
     if distance <= circle.r:
         return True
@@ -123,7 +123,7 @@ def circle_line(point1, point2, circle):
     length = ((dist.x ** 2) + (dist.y ** 2)) ** 0.5
 
     dot = (((circle.position.x-point1.x)*(point2.x-point1.x)) +
-           ((circle.y-point1.y)*(point2.y-point1.y)))
+           ((circle.position.y-point1.y)*(point2.y-point1.y)))
 
     closestx = point1.x + (dot * (point2.x - point1.x))
     closesty = point1.y + (dot * (point2.y - point1.y))
@@ -134,7 +134,7 @@ def circle_line(point1, point2, circle):
         return False
 
     distX = closest.x - circle.position.x
-    distY = closest.y - circle.y
+    distY = closest.y - circle.position.y
     distance = ((dist.x ** 2) + (dist.y ** 2)) ** 0.5
 
     if distance <= circle.r:
@@ -151,7 +151,7 @@ def poly_circle(vertices, circle):
             next = 0
         current_vector = vertices[current]
         next_vector = vertices[next]
-        collision = circle_line(current_vector, next_vector, circle)
+        collision = circle_line(current_vector[0], current_vector[1], circle)
         if collision:
             return True
 

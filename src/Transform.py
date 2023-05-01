@@ -293,7 +293,7 @@ class Poly(RigidBody):
 
             poly2 = R2
             poly2.update(poly2.dt)
-            collide, final1, final2 = poly_poly(poly2.sides, poly1.sides)
+            collide, point, final1, final2 = poly_poly(poly2.sides, poly1.sides)
             if collide:
                 self.n_colliders += 1
 
