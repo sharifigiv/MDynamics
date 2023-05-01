@@ -37,4 +37,8 @@ You can simulate rigid bodies and soft bodies!
 
 <br />
 
+![Soft Body2](assets/example6.gif?raw=true "Soft Body2")
+
+<br />
+
 ![Planets](assets/example5.gif?raw=true "Planets")
