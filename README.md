@@ -42,3 +42,7 @@ You can simulate rigid bodies and soft bodies!
 <br />
 
 ![Planets](assets/example5.gif?raw=true "Planets")
+
+<br />
+
+![Planets](assets/example7.gif?raw=true "Magnet")
