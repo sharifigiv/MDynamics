@@ -7,7 +7,7 @@ import src.Body as MDynamics
 import src.Collision as collision
 import pyray as pr 
 
-phy = MDynamics.MDynamics()
+phy = MDynamics.MDynamics(1080, 720)
 pr.init_window(1080, 720, "Drone 2D")
 
 Motor1 = phy.poly_rigidBody("Motor1", 500, 300, 10, [[vec.Vector(500, 300), vec.Vector(525, 300)], [vec.Vector(525, 300), vec.Vector(525, 350)], [vec.Vector(525, 350), vec.Vector(500, 350)], [vec.Vector(500, 350), vec.Vector(500, 300)]])
@@ -51,8 +51,8 @@ while not pr.window_should_close():
     Motor1.acceleration += vec.Vector(0, 9)
     Motor2.acceleration += vec.Vector(0, 9)
 
-    Motor1.update(0.003, edges = False)
-    Motor2.update(0.003, edges = False)
+    Motor1.update(0.003, 1080, 720, edges = False)
+    Motor2.update(0.003, 1080, 720, edges = False)
 
     for line in Motor1.sides:
         pr.draw_line(int(line[0].x), int(line[0].y), int(

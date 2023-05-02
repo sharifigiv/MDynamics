@@ -9,10 +9,10 @@ import src.Collision as collision
 import pyray as pr 
 
 pr.init_window(1080, 920, "Spring Lab")
-phy = MDynamics.MDynamics()
+phy = MDynamics.MDynamics(1080, 920)
 
 m = 50
-m1 = 100
+m1 = 600
 m2 = 500
 
 c1 = phy.circle_rigidbody("C1", 1080 // 2, 0, 1, 10000000)
@@ -35,7 +35,7 @@ while not pr.window_should_close():
     s1.update()
     s2.update()
 
-    phy.update_rigid_bodies(0.003)
+    phy.update_rigid_bodies(0.003, False)
 
     c1.velocity = v.Vector(0, 0)
     c2.velocity = v.Vector(0, 0)

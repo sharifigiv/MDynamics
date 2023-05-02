@@ -13,7 +13,7 @@ HEIGHT = 600
 
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 temperature = 100
-physics = MDynamics.MDynamics()
+physics = MDynamics.MDynamics(WIDTH, HEIGHT)
 physics.gravity = False
 
 for i in range(50):

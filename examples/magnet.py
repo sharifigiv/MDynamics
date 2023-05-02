@@ -12,7 +12,7 @@ import math
 WIDTH = 1080
 HEIGHT = 720
 
-physics = MDynamics.MDynamics()
+physics = MDynamics.MDynamics(WIDTH, HEIGHT)
 physics.gravity = False
 
 

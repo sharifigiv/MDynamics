@@ -11,7 +11,7 @@ from ui import Button
 import pyray as pr
 import time
 
-Phy = MDynamics()
+Phy = MDynamics(1280, 720)
 pr.init_window(1280, 720, "Playground")
 
 Phy.drag = True; Phy.friction = True

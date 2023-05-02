@@ -8,7 +8,7 @@ import src.Collision as collision
 import pyray as pr 
 
 pr.init_window(1080, 720, "Rope 2D")
-phy = MDynamics.MDynamics()
+phy = MDynamics.MDynamics(1080, 720)
 
 phy.gravity = False
 

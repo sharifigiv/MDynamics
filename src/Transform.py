@@ -94,11 +94,11 @@ class Classic_Poly(RigidBody):
                 points.append(side[1])
         self.center = Vector(sum_x/len(points), sum_y/len(points))
 
-    def update(self, dt, edges=True):
+    def update(self, dt, width, height, edges=True):
         self.dt = dt
 
         if edges:
-            if self.sides[0][0].y >= 720:
+            if self.sides[0][0].y >= height:
                 self.friction(self.mu)
                 self.velocity.y *= -1
 
@@ -106,11 +106,11 @@ class Classic_Poly(RigidBody):
         #     self.friction(self.mu)
         #     self.velocity.y *= -1
 
-        # if poly_line(self.sides, Vector(1280, 0), Vector(1280, 720)):
+        # if poly_line(self.sides, Vector(1280, 0), Vector(1280, height)):
         #     self.friction(self.mu)
         #     self.velocity.x *= -1
 
-        # if poly_line(self.sides, Vector(0, 0), Vector(0, 720)):
+        # if poly_line(self.sides, Vector(0, 0), Vector(0, height)):
         #     self.friction(self.mu)
         #     self.velocity.x *= -1
 
@@ -223,11 +223,11 @@ class Poly(RigidBody):
         self.center = Vector(sum_x/len(points), sum_y/len(points))
         self.inertia = calculate_inertia(self, gaz)
 
-    def update(self, dt, edges=True):
+    def update(self, dt, width, height, edges=True):
         self.dt = dt
 
         if edges:
-            if self.sides[0][0].y >= 720:
+            if self.sides[0][0].y >= height:
                 self.friction(self.mu)
                 self.velocity.y *= -1
 
@@ -235,11 +235,11 @@ class Poly(RigidBody):
         #     self.friction(self.mu)
         #     self.velocity.y *= -1
 
-        # if poly_line(self.sides, Vector(1280, 0), Vector(1280, 720)):
+        # if poly_line(self.sides, Vector(1280, 0), Vector(1280, height)):
         #     self.friction(self.mu)
         #     self.velocity.x *= -1
 
-        # if poly_line(self.sides, Vector(0, 0), Vector(0, 720)):
+        # if poly_line(self.sides, Vector(0, 0), Vector(0, height)):
         #     self.friction(self.mu)
         #     self.velocity.x *= -1
         self.velocity.x += self.acceleration.x * dt
@@ -374,17 +374,17 @@ class Circle(RigidBody):
                 self.velocity = v1p
                 R2.velocity = v2p
 
-    def update(self, dt, edges=True):
+    def update(self, dt, width, height, edges=True):
         self.dt = dt
 
         if edges:
-            if self.position.y >= 720 - self.r:
-                self.position.y = 720 - self.r
+            if self.position.y >= height - self.r:
+                self.position.y = height - self.r
                 self.friction(self.mu)
                 self.velocity.y *= -1
 
-            if self.position.x >= 1080 - self.r:
-                self.position.x = 1080 - self.r
+            if self.position.x >= width - self.r:
+                self.position.x = width - self.r
                 self.friction(self.mu)
                 self.velocity.x *= -1
 

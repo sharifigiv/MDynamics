@@ -9,7 +9,7 @@ import src.Collision as collision
 import pyray as pr 
 
 pr.init_window(1080, 720, "Cloth 2D")
-phy = MDynamics.MDynamics()
+phy = MDynamics.MDynamics(1080, 720)
 
 s = sf.SoftBody(100, 5, 5, vec.Vector(400, 100), phy)
 s.create_particles()
@@ -59,6 +59,6 @@ while not pr.window_should_close():
                 pass
             else:
                 phy.rigidBodies[rb].applyForce(vec.Vector(0, 998.1))
-                phy.rigidBodies[rb].update(0.003)
+                phy.rigidBodies[rb].update(0.003, 1080, 720)
 
     pr.end_drawing()

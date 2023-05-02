@@ -3,10 +3,13 @@ from Vector import Vector
 
 
 class MDynamics:
-    def __init__(self):
+    def __init__(self, WIDTH, HEIGHT):
         """ Initializes the physics engine"""
 
         self.rigidBodies = {}
+
+        self.width = WIDTH
+        self.height = HEIGHT
 
         self.drag = True
         self.dragv = 6
@@ -54,7 +57,7 @@ class MDynamics:
                 self.rigidBodies[rb1_name].collision(
                     self.rigidBodies[rb2_name])
 
-    def update_rigid_bodies(self, dt: float):
+    def update_rigid_bodies(self, dt: float, edges=True):
         """Updates all rigid bodies position"""
 
         for rb in list(self.rigidBodies.keys()):
@@ -66,4 +69,4 @@ class MDynamics:
                 RigidBody_object.applyForce(
                     Vector(0, 98.1 * RigidBody_object.mass))
 
-            RigidBody_object.update(dt)
+            RigidBody_object.update(dt, self.width, self.height, edges)

@@ -10,7 +10,7 @@ import pyray as pr
 from random import randrange, uniform
 from math import sin, cos, pi, radians
 
-physics = MDynamics.MDynamics()
+physics = MDynamics.MDynamics(1600, 900)
 pr.init_window(1600, 900, "Planets 2D")
 
 class star(transform.RigidBody):
